@@ -5,7 +5,6 @@
 ---
 
 require "oop.Class"
-
 require "examples.BaseClass"
 require "examples.SubClass"
 
@@ -17,6 +16,8 @@ baseInstance:Call()
 print("Test Read Public Variable: " .. baseInstance.param)
 print("")
 
+
+
 print("------Test New Lua Sub Object------")
 print("Test Constructor:")
 local subInstance = SubClass.new()
@@ -25,11 +26,25 @@ subInstance:Call()
 print("Test Read Super Public Variable: " .. subInstance.param)
 print("")
 
-print("------Test Lua Object UpValue------")
+
+
+print("------Test Lua Object Private Variable------")
 local sub1 = SubClass.new()
 local sub2 = SubClass.new()
 sub1:SetValue(3)
 sub2:SetValue(5)
 print("sub1 GetValue = " .. tostring(sub1:GetValue()))
 print("sub2 GetValue = " .. tostring(sub2:GetValue()))
+print("")
+
+
+print("------Test Lua Object Static Variable------")
+local sub3 = SubClass.new()
+local sub4 = SubClass.new()
+print("sub3 GetStaticValue = " .. tostring(sub3:GetStaticValue()))
+print("sub4 GetStaticValue = " .. tostring(sub4:GetStaticValue()))
+print("change SubClass.static.NAME")
+SubClass.static.NAME = "changed static name"
+print("sub3 GetStaticValue = " .. tostring(sub3:GetStaticValue()))
+print("sub4 GetStaticValue = " .. tostring(sub4:GetStaticValue()))
 print("")

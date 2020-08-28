@@ -1,61 +1,50 @@
-function class(classname, super)
+local function _create(proxy)
+    
+    local instance = proxy.__create()
+    
+    for k, v in pairs(proxy) do
+        
+        if k ~= "new" and k ~= "__create" and k ~= "super" then
+            instance[k] = v
+        end
+    end
+    
+    if not proxy.super and not instance.ctor then
+        instance.ctor = function()
+        end
+    end
+    
+    if proxy.super then
+        
+        local superInstance = _create(proxy.super)
+        instance.super      = superInstance
+        setmetatable(instance, { __index = superInstance })
+    end
+    
+    instance.__index = instance
+    return instance
+end
 
-    local superType = type(super)
-    local cls
-
+function class(classname, superProxy)
+    
+    local superType = type(superProxy)
+    local proxy
+    
     if superType ~= "table" then
-        superType = nil
-        super = nil
+        superType  = nil
+        superProxy = nil
     end
-
-    if super then
     
-        cls       = {}
-        cls.super = super
-    else
-        cls = {ctor = function() end}
-    end
-
-    cls.__prototype = "class"
-    cls.__cname     = classname
-
-    local function __new(clazz)
+    proxy         = {}
+    proxy.super   = superProxy
+    proxy.__cname = classname
     
-        local instance
-    
-        if clazz.__create then
-            instance = clazz.__create()
-        else
-            instance = {}
-        end
+    function proxy.new(...)
         
-        instance.class       = clazz
-        instance.__prototype = "instance"
-    
-        for k, v in pairs(clazz) do
-        
-            if k ~= "__cname" and k ~= "__create" and k ~= "new" and k ~= "__index" and k ~= "super" and k ~= "__prototype" then
-                instance[k] = v
-            end
-        end
-    
-        if clazz.super then
-        
-            local superInstance = __new(clazz.super)
-            instance.super      = superInstance
-            setmetatable(instance, { __index = superInstance })
-        end
-    
-        instance.__index = instance
-        return instance
-    end
-
-    function cls.new(...)
-    
-        local instance = __new(cls)
+        local instance = _create(proxy)
         instance:ctor(...)
         return instance
     end
-        
-    return cls
+    
+    return proxy
 end

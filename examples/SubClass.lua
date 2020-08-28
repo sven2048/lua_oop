@@ -7,31 +7,40 @@
 ---@class SubClass
 SubClass          = class("SubClass", BaseClass)
 
+SubClass.static =
+{
+    NAME = "static name"
+}
+
 SubClass.__create = function()
+    
+    local Instance = {}
     
     local _value
     
-    function SubClass:ctor()
+    function Instance:ctor()
         
         print("SubClass:ctor Invoked")
         self.super:ctor("ParamFromSubClass")
     end
     
-    function SubClass:Call()
+    function Instance:Call()
         print("SubClass:Call Invoked")
         self.super:Call()
     end
     
-    function SubClass:GetValue()
+    function Instance:GetValue()
         return _value
     end
     
-    function SubClass:SetValue(val)
+    function Instance:GetStaticValue()
+        return self.static.NAME
+    end
+    
+    function Instance:SetValue(val)
         _value = val
     end
     
-    return {}
+    return Instance
 end
-
-return SubClass
 

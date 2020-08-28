@@ -7,15 +7,20 @@
 ---@class BaseClass
 BaseClass = class("BaseClass")
 
-function BaseClass:ctor(param)
-
-    self.param = param
-    print("BaseClass:ctor Invoked and param = " .. tostring(param))
-end
-
-function BaseClass:Call()
+function BaseClass.__create()
     
-    print("BaseClass:Call Invoked")
+    local Instance = {}
+    
+    function Instance:ctor(param)
+        
+        self.param = param
+        print("BaseClass:ctor Invoked and param = " .. tostring(param))
+    end
+    
+    function Instance:Call()
+        
+        print("BaseClass:Call Invoked")
+    end
+    
+    return Instance
 end
-
-return BaseClass
