@@ -4,11 +4,11 @@
 --- DateTime: 2020/8/24 9:30 下午
 ---
 
----@class BaseClass
 BaseClass = class("BaseClass")
 
 function BaseClass.__create()
     
+    ---@class BaseClass
     local Instance = {}
     
     function Instance:ctor(param)

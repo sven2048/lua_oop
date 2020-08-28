@@ -4,7 +4,6 @@
 --- DateTime: 2020/8/24 9:31 下午
 ---
 
----@class SubClass
 SubClass          = class("SubClass", BaseClass)
 
 SubClass.static =
@@ -14,6 +13,7 @@ SubClass.static =
 
 SubClass.__create = function()
     
+    ---@class SubClass
     local Instance = {}
     
     local _value
@@ -21,22 +21,27 @@ SubClass.__create = function()
     function Instance:ctor()
         
         print("SubClass:ctor Invoked")
+        --调用父类构造函数
         self.super:ctor("ParamFromSubClass")
     end
     
     function Instance:Call()
         print("SubClass:Call Invoked")
+        --调用父类方法
         self.super:Call()
     end
     
+    --获取私有变量
     function Instance:GetValue()
         return _value
     end
     
     function Instance:GetStaticValue()
+        --获取类的静态字段
         return self.static.NAME
     end
     
+    --设值私有变量
     function Instance:SetValue(val)
         _value = val
     end
