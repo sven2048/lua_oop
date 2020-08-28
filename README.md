@@ -100,7 +100,7 @@
     local subInstance = SubClass.new()
     print(subInstance.static.NAME)
     
-    方式1：从类中直接获取
+    方式2：从类中直接获取
 
     print(SubClass.static.NAME)
     ```
