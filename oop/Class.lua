@@ -1,22 +1,22 @@
-local function _create(factory)
+local function _create(proxy)
     
-    local instance = factory.__create()
+    local instance = proxy.__create()
     
-    for k, v in pairs(factory) do
+    for k, v in pairs(proxy) do
         
         if k ~= "new" and k ~= "__create" and k ~= "super" then
             instance[k] = v
         end
     end
     
-    if not factory.super and not instance.ctor then
+    if not proxy.super and not instance.ctor then
         instance.ctor = function()
         end
     end
     
-    if factory.super then
+    if proxy.super then
         
-        local superInstance = _create(factory.super)
+        local superInstance = _create(proxy.super)
         instance.super      = superInstance
         setmetatable(instance, { __index = superInstance })
     end
@@ -25,26 +25,26 @@ local function _create(factory)
     return instance
 end
 
-function class(className, superFactory)
+function class(classname, superProxy)
     
-    local superType = type(superFactory)
-    local factory
+    local superType = type(superProxy)
+    local proxy
     
     if superType ~= "table" then
-        superType    = nil
-        superFactory = nil
+        superType  = nil
+        superProxy = nil
     end
     
-    factory         = {}
-    factory.super   = superFactory
-    factory.__cname = className
+    proxy         = {}
+    proxy.super   = superProxy
+    proxy.__cname = classname
     
-    function factory.new(...)
+    function proxy.new(...)
         
-        local instance = _create(factory)
+        local instance = _create(proxy)
         instance:ctor(...)
         return instance
     end
     
-    return factory
+    return proxy
 end
