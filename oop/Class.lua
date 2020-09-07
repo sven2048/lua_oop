@@ -25,7 +25,7 @@ local function _create(proxy)
     return instance
 end
 
-function class(classname, superProxy)
+function class(className, superProxy)
     
     local superType = type(superProxy)
     local proxy
@@ -37,7 +37,7 @@ function class(classname, superProxy)
     
     proxy         = {}
     proxy.super   = superProxy
-    proxy.__cname = classname
+    proxy.__cname = className
     
     function proxy.new(...)
         
